@@ -10,7 +10,7 @@ import java.lang.reflect.Proxy;
 public class Client2 {
     public static void main(String[] args) throws ClassNotFoundException {
         //JDK11,开启保存jdk动态代理生成的类
-        System.getProperties().put("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");
+//        System.getProperties().put("jdk.proxy.ProxyGenerator.saveGeneratedFiles", "true");
         Singer proxy = (Singer) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
                 new Class[]{Singer.class},
                 new MyHand(new AnniSinger("little anni")));//这个handler持有了一个被代理对象
@@ -30,6 +30,7 @@ public class Client2 {
                 aClass.getInterfaces(),
                 (proxy, method, args) -> {
                     System.out.println("前面");
+                    //通过class对象获取构造器
                     Constructor<?> declaredConstructor = aClass.getDeclaredConstructor();
                     method.invoke(declaredConstructor.newInstance());
                     System.out.println("后面");
